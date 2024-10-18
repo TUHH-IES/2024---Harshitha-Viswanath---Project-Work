@@ -1,0 +1,13 @@
+uri: file:./thermostat_simulation_data.csv
+
+features:
+  - name: Time
+    kind: scalar
+    description: "time in seconds since simulation start"
+    unit: seconds
+  - name: Temperature
+    kind: scalar
+    description: "measured temperature of the system"
+    unit: Celsius
+
+
