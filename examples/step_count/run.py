@@ -49,7 +49,7 @@ class Idle(DifferentialMode[Acceleration, Target_Acceleration]):
         state: NDArray[np.float64],
     ) -> NDArray[np.float64]:
         _ = t
-        return np.array([])  #the parameter that governs the continuous state?
+        return np.array([0.0])  #the parameter that governs the continuous state?
 
     @override
     def transition(
@@ -71,7 +71,7 @@ class Detection(DifferentialMode[Acceleration, Target_Acceleration]):
         state: NDArray[np.float64],
     ) -> NDArray[np.float64]:
         _ = t
-        return np.array([])  #the parameter that governs the continuous state?
+        return np.array([0.0])  #the parameter that governs the continuous state?
 
     @override
     def transition(
@@ -97,30 +97,28 @@ class Count(DifferentialMode[Acceleration, Target_Acceleration]):
         t: float,
         state: NDArray[np.float64],
     ) -> NDArray[np.float64]:
-        _ = t
-        return np.array([])  #the parameter that governs the continuous state?
+        self.v = self.v - (self.omega**2) * self.y * self.t
+        self.y = self.y + self.v * self.t
+        return np.array([self.y]) #should return 0.0 or a non-zero value. Error thrown if left empty
 
     @override
     def transition(
         self,
         t: float,
     ) -> DifferentialMode[Acceleration, Target_Acceleration]:
-        self.v = self.v - (self.omega**2) * self.y * self.t
-        self.y = self.y + self.v * self.t
         if abs(self.y) > self.y_threshold:
             step_count += 1
-            self.y = 0
+            self.y = 20
         if self.state.acceleration >  self.threshold_detect and self.state.acceleration < self.threshold_walk :   
             return Detection(t=0.0, state = self.state)
         if self.state.acceleration  < self.threshold_detect:   
             return Idle(t=0.0, state = self.state)
         return self
     
-
 def randomly_changing_values(
-        change_probability: float,
-        minimum: float,
-        maximum: float,
+    change_probability: float,
+    minimum: float,
+    maximum: float,
 ) -> Iterator[float]:
     value = random.uniform(minimum, maximum)
     while True:
@@ -128,22 +126,24 @@ def randomly_changing_values(
             value = random.uniform(minimum, maximum)
         yield value
 
+
 def main() -> None:
     initialize_logging()
 
-    target_accelerations = ((0.1 * i, acceleration)
-        for i, acceleration in enumerate(
+    target_accelerations = (
+        (0.1 * i, acc)
+        for i, acc in enumerate(
             randomly_changing_values(
                 change_probability=0.002,
-                minimum=30.0,
-                maximum=60.0,
+                minimum=0.5,
+                maximum=2.0,
             )
         )
-    ) #read the simulation acceleration data from matlab
+    )
 
     environment = HybridSystem(
-        initial_mode=Idle(t=0.0, state=Acceleration(30)),   
-        inputs=target_accelerations,
+        initial_mode=Idle(t=0.0, state=Acceleration(0.7)),
+        inputs = target_accelerations,
         map_to_dataframe=lambda times, inputs, modes: pl.DataFrame(
             {
                 "time": times,
@@ -153,12 +153,14 @@ def main() -> None:
         ),
     ).load()
 
+
     data = environment.collect(10_000)
     train, test = TrainTestSplit(ratio=0.8).split(data)
 
     train = train.with_transform(
         SlidingWindow(window_size=10),
     )
+
     test = test.with_transform(
         SlidingWindow(window_size=10),
     )
@@ -189,10 +191,3 @@ if __name__ == "__main__":
     main()
 
 
-
-
-##Errors encountered##
-# type step_count is throwing error : made it to global
-# class Count(DifferentialMode[Acceleration]) : DifferentialMode needs two arguments
-# two arguments must for transition() : i : Target_acceleration - dummy variable
-#ValueError: could not broadcast input array from shape (0,) into shape (1,)
