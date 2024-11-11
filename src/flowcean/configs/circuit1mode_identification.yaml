@@ -1,0 +1,56 @@
+file: "C:/Users/49157/Desktop/PA/2024---Harshitha-Viswanath---Project-Work/src/flowcean/data/electricCircuit1mode/circuit_data.csv"
+features:
+  - U1
+  - U2
+  - U3
+  - R
+
+start_width: 200
+step_width: 100
+step_iterations: 5
+file_prefix: "circuit1"
+hist_length: 5
+
+segmentation:
+  criterion: 
+    name: "decrease"
+    kwargs:
+      saturation: 1e-7
+  kwargs:
+    niterations: 20
+    verbosity: 0
+    complexity_of_constants: 10
+    parsimony: 1e-6
+    random_state: 42
+    deterministic: true
+    procs: 0
+    multithreading: false
+    binary_operators:
+      - "-"
+      - "+"
+      - "*"
+      - "/"
+    unary_operators:
+
+grouping:
+  criterion:
+    name: "preserving_group_loss"
+    kwargs:
+      factor: 1.5
+  kwargs:
+    niterations: 10
+    verbosity: 0
+    random_state: 42
+    deterministic: true
+    procs: 0
+    multithreading: false
+    complexity_of_constants: 10
+    parsimony: 1e-6
+    binary_operators:
+      - "-"
+      - "+"
+      - "*"
+      - "/"
+    unary_operators:
+
+target_var: 'I4'

@@ -1,0 +1,56 @@
+file: "data/converter/short_wto_zeros_data_converter_omega400e3_beta40e3_Q10_theta60.csv"
+features:
+  - t
+  - w1
+  - w2
+
+start_width: 100
+step_width: 20
+step_iterations: 20
+file_prefix: "converter"
+hist_length: 5
+
+segmentation:
+  criterion: 
+    name: "decrease"
+    kwargs:
+      saturation: 1e-6
+  kwargs:
+    niterations: 100
+    verbosity: 0
+    random_state: 42
+    deterministic: true
+    procs: 0
+    multithreading: false
+    parsimony: 0.0032
+    binary_operators:
+      - "-"
+      - "+"
+      - "*"
+      - "/"
+    unary_operators:
+      - "sqrt"
+
+grouping:
+  criterion:
+    name: "preserving_group_loss"
+    kwargs:
+      factor: 1
+  kwargs:
+    niterations: 20
+    populations: 15
+    verbosity: 0
+    random_state: 42
+    deterministic: true
+    procs: 0
+    multithreading: false
+    binary_operators:
+      - "-"
+      - "+"
+      - "*"
+      - "/"
+    unary_operators:
+      - "sqrt"
+
+target_var: 'w2'
+derivative: true
