@@ -1,0 +1,2 @@
+window_start,window_end,extensions,equation,loss
+0,6000,59,(U1 + U2 + U3)*0.025,1.8829382000000003e-16
