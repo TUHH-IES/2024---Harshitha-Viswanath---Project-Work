@@ -18,7 +18,7 @@ from collections import deque
 from statistics import mean
 
 import logging
-from typing import Any, override
+from typing import Any, override, List
 import os 
 
 from flowcean.core import Model, SupervisedLearner
@@ -195,16 +195,21 @@ class Group:
 class Segmentor:
     def __init__(
             self, 
-            **kwargs : Any, #args should be given as a dict?
+            start_width : int,
+            step_width : int,
+            features : List[str],
+            file_prefix : str,
+            target_var : str,
+            **kwargs : Any, #args given to pysr
             ) -> None:
-        self.start_width = kwargs.get("start_width")
-        self.step_width = kwargs.get("step_width")
-        self.features = kwargs.get("features")
-        self.file_prefix = kwargs.get("file_prefix")
-        self.target_var = kwargs.get("target_var")
+        self.start_width = start_width
+        self.step_width = step_width
+        self.features = features
+        self.file_prefix = file_prefix
+        self.target_var = target_var
 
         #pysr arguments
-        pysr_args = {
+        """ pysr_args = {
                 "niterations": 40, 
                 "verbosity" : 0, 
                 "random_state" : 42, 
@@ -215,14 +220,14 @@ class Segmentor:
                 "binary_operators" : ["+", "-", "*", "/"], 
                 "unary_operators" : None
         }
-
+ """
         #keyword arguments with default values
         self.step_iterations = 5
         self.hist_length = 5
         self.criterion = getattr(segmentation_criteria, "decrease")
         self.criterion = partial(self.criterion, {"saturation": 1e-6}) 
         self.selection = "loss" #check with loss?
-        self.learner = PySRRegressor(**pysr_args) #not pass any args since we are using all the default paramters
+        self.learner = PySRRegressor(**kwargs) #if any specific args are sent else default params are used
         self.learner.feature_names = self.features
 
     def segment(self, data_frame):
@@ -303,13 +308,15 @@ class GroupIdentificator:
 
     def __init__(
             self,
+            features : List[str],
+            file_prefix : str,
             **kwargs : Any,) -> None:
         
-        self.features = kwargs.get("features")
-        self.file_prefix = kwargs.get("file_prefix")
+        self.features = features
+        self.file_prefix = file_prefix
 
         #pysr args
-        pysr_args = {
+        """ pysr_args = {
             "niterations": 40,
             "verbosity": 0,
             "random_state": 42,
@@ -321,12 +328,12 @@ class GroupIdentificator:
             "unary_operators": None,
             "population": 40 
         }
-
+ """
         #keyword arguments with default values
         self.criterion = getattr(grouping_criteria, "preserving_group_loss")
         self.criterion = partial(self.criterion, {"factor":1})
         self.selection = "loss" #check with loss?
-        self.learner = PySRRegressor(**pysr_args) #not pass any args since we are using all the default paramters
+        self.learner = PySRRegressor(**kwargs) #if any specific args are sent else default params are used
         self.learner.warm_start = False
         self.learner.feature_names = self.features
 
