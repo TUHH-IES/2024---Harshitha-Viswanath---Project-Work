@@ -1,1 +1,51 @@
+import logging
+import flowcean.cli
+from flowcean.environments.train_test_split import TrainTestSplit
+from flowcean.environments.uri import UriDataLoader
+from flowcean.metrics.regression import MeanAbsoluteError, MeanSquaredError
+from flowcean.strategies.offline import evaluate_offline, learn_offline
+from flowcean.transforms import Select, Standardize, Derivative
 
+from flowcean.models.srmodel import SymbolicRegressionModel
+from flowcean.learners.symbolic_regression import SymbolicRegression
+
+
+logger = logging.getLogger(__name__)
+
+def main() -> None:
+    flowcean.cli.initialize_logging()
+
+    data = UriDataLoader(uri="file:C:/Users/49157/Desktop/PA/SR_Original_code/SymbolicRegression4HA/data/converter/short_wto_zeros_data_converter_omega400e3_beta40e3_Q10_theta60.csv").with_transform(
+        Select(
+            [
+                "t",
+                "w1",
+                "w2",
+                "sigma",
+            ],
+        ),
+    ).load()
+
+    inputs = ["t", "w1", "w2"]
+    outputs = ["w2"]
+
+    learner = SymbolicRegression(
+        csv_file_path = "C:/Users/49157/Desktop/PA/SR_Original_code/SymbolicRegression4HA/data/converter/short_wto_zeros_data_converter_omega400e3_beta40e3_Q10_theta60.csv",  
+        features = inputs,
+        start_width = 100,
+        step_width = 20, 
+        target_var = outputs,
+        derivative = True,
+    )
+    
+    model = learn_offline(
+        data,
+        learner,
+        inputs,
+        outputs,
+    )  
+
+
+
+if __name__ == "__main__":
+    main()
