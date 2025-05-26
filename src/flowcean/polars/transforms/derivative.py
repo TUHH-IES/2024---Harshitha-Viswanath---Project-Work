@@ -18,10 +18,24 @@ class Derivative:
     @override
     def apply(self, output_features) -> pl.LazyFrame:
        data_frame = output_features.collect()
-       data_frame = data_frame.with_columns(diff=pl.col(self.target_var).diff())
-       data_frame[0, "diff"] = data_frame["diff"][1]
-       data_frame = data_frame.drop(self.target_var[0])
-       data_frame = data_frame.with_columns(pl.col("diff").alias(self.target_var[0])).drop("diff")
+       diff_cols = [pl.col(col).diff().alias(f"diff_{col}")
+                    for col in self.target_var]
+       data_frame = data_frame.with_columns(diff_cols)
+       
+       for col in self.target_var:
+           diff_cols = f"diff_{col}"
+           val = data_frame[diff_cols][1]
+           data_frame = data_frame.with_columns([
+                pl.when(pl.arange(0, data_frame.height) == 0)
+                .then(val)
+                .otherwise(pl.col(diff_cols))
+                .alias(diff_cols)])
+           
+       #print(data_frame)
+       
+       data_frame = data_frame.drop(*self.target_var)
+       data_frame = data_frame.rename({f"diff_{col}": col for col in self.target_var})
+       print(data_frame)
        return data_frame
        """ print(data_frame) """
 
