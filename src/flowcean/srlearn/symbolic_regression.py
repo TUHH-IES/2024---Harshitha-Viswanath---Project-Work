@@ -214,15 +214,17 @@ class Segmentor:
         #pysr arguments
         pysr_args = {
             "niterations": 200,
-            "verbosity": 0,
             "random_state": 42,
             "deterministic": True,
             "procs": 0,
             "parallelism": "serial",
             "parsimony": 0.001,
-            "binary_operators": ["+", "-", "*", "/"],
+            "binary_operators": ["+", "-", "*", "/", "pow"],
             "unary_operators": ["sqrt", "log", "exp"],
-            "populations": 60
+            "populations": 60,
+            "verbosity" : True,
+            "model_selection": "best",
+
         }
 
         #keyword arguments with default values
@@ -274,6 +276,8 @@ class Segmentor:
                 X_train = current_frame[self.learner.feature_names]
                 y_train = current_frame[self.target_var]
                 self.learner.fit(X_train, y_train)
+                print(self.learner.get_best())       # Debug
+                print(self.learner.equations_)       # Debug
                 fitness_hist.append(self.learner.get_best()[self.selection])
                 self.learner.warm_start = True
                 self.learner.niterations = self.step_iterations
@@ -336,15 +340,17 @@ class GroupIdentificator:
 
         pysr_args = {
             "niterations": 200,
-            "verbosity": 0,
             "random_state": 42,
             "deterministic": True,
             "procs": 0,
             "parallelism": "serial",
             "parsimony": 0.001,
-            "binary_operators": ["+", "-", "*", "/"],
+            "binary_operators": ["+", "-", "*", "/", "pow"],
             "unary_operators": ["sqrt", "log", "exp"],
-            "populations": 60
+            "populations": 60,
+            "verbosity" : True,
+            "model_selection": "best",
+
         }
 
 
@@ -469,14 +475,14 @@ class SymbolicRegression(SupervisedLearner):
             start_width : int,
             step_width : int,
             target_var : str,  #should this be a list??
-            derivative : bool,
+            #derivative : bool,
     ) -> None: 
         #self.csv_file_path = csv_file_path
         self.features = features
         self.start_width = start_width
         self.step_width = step_width
         self.target_var = target_var
-        self.derivative = derivative
+        #self.derivative = derivative
         
         self.file_prefix = "converter_file_prefix"  
 
@@ -490,7 +496,8 @@ class SymbolicRegression(SupervisedLearner):
     @override
     def learn(self, inputs, outputs):
         inputs = inputs.collect().drop(self.target_var)
-        outputs = outputs.collect()
+        if isinstance(outputs, pl.LazyFrame):
+            outputs = outputs.collect()
         self.data_frame = pl.concat([inputs, outputs], how="horizontal")
         print(self.data_frame)
         segmentor = Segmentor(start_width=self.start_width, step_width=self.step_width, features= self.features, file_prefix=self.file_prefix, target_var=self.target_var)
