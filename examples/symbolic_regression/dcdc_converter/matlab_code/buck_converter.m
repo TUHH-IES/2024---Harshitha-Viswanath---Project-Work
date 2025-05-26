@@ -78,12 +78,18 @@ yticks([0 1]); yticklabels({'OFF', 'ON'});
 title('Switching Behavior');
 grid on;
 
+
+
 %% Export to CSV
 T = table(t', x(1,:)', x(2,:)', mode', ...
-    'VariableNames', {'Time_s', 'InductorCurrent_A', 'CapacitorVoltage_V', 'SwitchState'});
+    repmat(24, numel(t), 1), ...          % Vin
+    repmat(1e-3, numel(t), 1), ...        % L
+    repmat(470e-6, numel(t), 1), ...      % C
+    repmat(10, numel(t), 1), ...          % R
+    'VariableNames', {'Time_s', 'InductorCurrent_A', 'CapacitorVoltage_V', 'SwitchState', ...
+                      'Vin_V', 'L_H', 'C_F', 'R_Ohm'});
+
 
 writetable(T, 'buck_converter_output.csv');
 
-%% Show which switch states were seen
-disp('Switch states seen:');
-disp(unique(mode));
+
