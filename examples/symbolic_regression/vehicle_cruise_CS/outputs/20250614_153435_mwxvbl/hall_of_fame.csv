@@ -1,0 +1,12 @@
+Complexity,Loss,Equation
+1,12.003778,"48.478516"
+3,0.04895105,"Velocity_t + dx"
+5,0.048882563,"(dx * 0.99860126) + Velocity_t"
+7,0.048275,"((dx + Velocity_t) * 0.99280906) + 0.35554737"
+11,0.042160247,"(((dx + Velocity_t) * 0.010252817) * (Velocity_t + dx)) + 24.26528"
+20,0.0049011344,"sqrt((Velocity_t * Velocity_t) - (Velocity_t / ((((dx + (Velocity_t + dx)) / -0.6471615) + Velocity_t) + 1.73906))) + dx"
+22,0.0024237526,"sqrt((Velocity_t * (-0.09784741 + Velocity_t)) - (Velocity_t / ((((dx + (Velocity_t + dx)) / -0.6471615) + Velocity_t) + 1.73906))) + dx"
+24,0.0022631169,"sqrt((Velocity_t * Velocity_t) - (dx * (dx / ((1.73906 + (((dx + dx) + Velocity_t) / -0.6471615)) + Velocity_t)))) + (dx + -0.053864773)"
+26,0.0021821116,"sqrt((Velocity_t * Velocity_t) - ((dx * dx) / ((Velocity_t + (((Velocity_t + dx) + dx) / -0.64707714)) + 1.7390591))) + ((dx + -0.053864777) - -0.009055643)"
+27,0.002005037,"dx + sqrt((Velocity_t * Velocity_t) - ((dx + dx) / (dx + sqrt(Velocity_t * (((((Velocity_t * 0.30600655) + -2.4474118) + dx) * 0.36133134) - 0.19537574)))))"
+28,0.002003854,"sqrt((Velocity_t * Velocity_t) - (((dx - -0.9765092) * dx) / ((1.73906 + ((dx + (dx + Velocity_t)) / -0.6471615)) + Velocity_t))) + (dx + (-0.053864773 - -0.009055646))"
