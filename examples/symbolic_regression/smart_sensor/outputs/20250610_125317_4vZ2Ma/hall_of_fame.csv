@@ -1,0 +1,7 @@
+Complexity,Loss,Equation
+1,1105.9774,"65.92387"
+3,147.53171,"input_u * 20.530153"
+5,1.9650642,"input_u * (input_u * 5.186335)"
+7,2.5107107e-11,"((input_u * input_u) * 5.0) - -3.0000002"
+9,2.1186174e-11,"(input_u * (input_u + (input_u * 4.0))) + 3.0000005"
+10,2.1165963e-11,"(sqrt(input_u * input_u) * (input_u * 5.0)) + 3.0000002"

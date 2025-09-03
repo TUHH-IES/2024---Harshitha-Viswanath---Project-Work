@@ -1,2 +1,2 @@
 group_id,loss,equation
-0,0.0011140507,dx + sqrt(Velocity_t*(Velocity_t - 0.09784741) - Velocity_t/(-0.545209348825602*Velocity_t - 3.0904186976512*dx + 1.73906))
+0,0.010122645,Velocity_t + dx

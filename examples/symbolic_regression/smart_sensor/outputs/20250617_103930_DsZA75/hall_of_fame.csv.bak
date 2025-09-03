@@ -1,0 +1,12 @@
+Complexity,Loss,Equation
+1,1602.3832,"43.737694"
+3,165.03886,"input_u * 19.781507"
+5,11.803821,"(input_u * 5.17233) * input_u"
+7,10.993628,"(input_u + -0.28361353) * (input_u * 5.568403)"
+9,10.695257,"(input_u * ((input_u * 5.536981) - 1.2252573)) - 0.8774203"
+13,10.162562,"input_u * ((input_u * ((0.09218446 - (input_u * 0.29739597)) + 7.338148)) + -4.172885)"
+19,8.574852,"(input_u + (input_u + input_u)) * (input_u + (((input_u + -1.0623108) - (input_u * (input_u * 0.13570069))) * input_u))"
+21,8.287681,"((input_u + (((input_u - ((input_u * input_u) * 0.13939987)) + -0.9163636) * input_u)) * (input_u + (input_u + input_u))) - input_u"
+23,8.104233,"((((((input_u * input_u) - (input_u - 1.3227348)) - (input_u - 2.970586)) * -0.16152836) + input_u) * (input_u + 1.2476554)) * (input_u + input_u)"
+25,8.055044,"input_u + ((input_u + (((input_u / 3.4925017) * (input_u - 1.7198672)) * -0.612096)) * (((input_u + (input_u * input_u)) + (input_u * input_u)) - 2.3956409))"
+27,8.02568,"((((((input_u * input_u) - (input_u - 2.3611357)) - (input_u - 4.0098953)) * -0.15521161) + input_u) * ((input_u + input_u) * (input_u + 1.7024142))) + (input_u + -0.27158916)"

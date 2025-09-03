@@ -16,9 +16,9 @@ for k = 1:N
     q_history(k) = q;
 
     % Switching logic
-    if q == 1 && u_k > 2
+    if q == 1 && u_k >= 2
         q = 2;
-    elseif q == 2 && u_k < 1
+    elseif q == 2 && u_k <= 1
         q = 1;
     end
 

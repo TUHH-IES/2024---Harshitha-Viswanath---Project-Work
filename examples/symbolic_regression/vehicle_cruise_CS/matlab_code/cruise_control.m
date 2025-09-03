@@ -7,8 +7,8 @@ time = 0:dt:T;               % Time vector
 velocity = zeros(size(time));% Velocity vector (km/h)
 
 % Initial condition
-velocity(1) = 35;            % Start below the threshold
-
+velocity(1) = 35;    % Start below the threshold
+dx_target = 0;
 % Mode and step storage
 modes = strings(size(time));
 dxs = zeros(size(time));     % Store dx at each step
@@ -17,18 +17,20 @@ v_next = zeros(size(time));  % Store velocity(t+1)
 
 for t = 1:length(time)-1
     v_curr(t) = velocity(t);
-    if velocity(t) < 50
-        dx = +5;
-        modes(t) = "Accelerate";
-    elseif velocity(t) >= 50
-        dx = -7;
-        modes(t) = "Brake";
-    end
-    dxs(t) = dx;
-    velocity(t+1) = velocity(t) + dx * dt;
+    if velocity(t) < 50 - hyst 
+        dx = +5; 
+        modes(t) = "Accelerate"; 
+    elseif velocity(t) >= 50 + hyst 
+        dx = -7; 
+        modes(t) = "Brake"; 
+    end 
+
+    alpha = 0.2; %easies the triangular spikes
+    dx_target = dx_target + alpha * (dx - dx_target);
+    dxs(t) = dx_target; 
+    velocity(t+1) = velocity(t) + dx_target * dt; %Pysr models this equation: all the datapoints are grouped into a single group
     v_next(t) = velocity(t+1);
 end
-
 % For the last entry
 v_curr(end) = velocity(end);
 v_next(end) = velocity(end);

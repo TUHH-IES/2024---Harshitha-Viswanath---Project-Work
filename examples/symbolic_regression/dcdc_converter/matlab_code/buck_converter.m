@@ -31,7 +31,7 @@ for k = 1:length(t)-1
     % Hysteresis control logic
     if mode(k) == 1 && Vout >= Vref + hyst
         mode(k+1) = 0;  % Turn OFF
-    elseif mode(k) == 0 && Vout <= Vref - hyst
+    elseif mode(k) == 0 && Vout < Vref - hyst
         mode(k+1) = 1;  % Turn ON
     else
         mode(k+1) = mode(k);  % Hold previous state
@@ -87,7 +87,7 @@ T = table(t', x(1,:)', x(2,:)', mode', ...
     repmat(470e-6, numel(t), 1), ...      % C
     repmat(10, numel(t), 1), ...          % R
     'VariableNames', {'Time_s', 'InductorCurrent_A', 'CapacitorVoltage_V', 'SwitchState', ...
-                      'Vin_V', 'L_H', 'C_F', 'R_Ohm'});
+                      'Vin_V', 'L_H', 'C_F', 'R_Ohm'});  %Vout is Capacitor Volatge
 
 
 writetable(T, 'buck_converter_output.csv');

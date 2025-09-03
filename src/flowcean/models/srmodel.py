@@ -1,21 +1,36 @@
-from pathlib import Path
+from __future__ import annotations
+
+from io import BytesIO
 from typing import Any
+
+import joblib
 import polars as pl
+import numpy as np
+import math
+from typing_extensions import override
 
 # Base Model class (if defined in your project)
-from flowcean.core.model import Model
+from flowcean.core import Model
 
 class SymbolicRegressionModel(Model):
-    def __init__(self, results: list[pl.DataFrame]) -> None:
+
+    def __init__(self, 
+        results: list[pl.DataFrame]
+        ) :
+        
         self.results = results
 
-    def predict(self, input_features: pl.DataFrame) -> pl.DataFrame:
-        input_features = input_features.collect().with_row_count(name="count")
-        grouping_windows = self.results[0]
-        grouping_results = self.results[1]
+    def predict(
+        self,
+        input_features: pl.LazyFrame
+        ) -> pl.LazyFrame:
+        input_features_new = input_features.collect().with_row_count(name="count")
+        grouping_windows = self.results[0].collect()
+        grouping_results = self.results[1].collect()
+
 
         # Start with an 'id' column set to None
-        output = input_features.with_columns(pl.lit(None).alias("group_id"))
+        output = input_features_new.with_columns(pl.lit(None).alias("group_id"))
 
         # Iterate over grouping_windows to assign group IDs
         for row in grouping_windows.iter_rows():
@@ -28,8 +43,10 @@ class SymbolicRegressionModel(Model):
                 .alias("group_id")
             )
 
+        print(output)
+
         output = output.with_columns(
-            (pl.col("group_id") != pl.col("group_id").shift(1)).cum_sum().alias("block_id")
+            ((pl.col("group_id") != pl.col("group_id").shift(1)).fill_null(True).cum_sum()).alias("block_id")
         )
 
         result = (
@@ -50,13 +67,55 @@ class SymbolicRegressionModel(Model):
         pl.Config.set_tbl_rows(3000)  # Set maximum rows to print
         pl.Config.set_tbl_cols(100) 
         print(result)
-        #return result
 
-    def load_from_state(self, path: Path) -> None:   #What to implement here since there is no .pkl to load and dump
-        self.results[0] = pl.read_csv(path)
+        output = output.with_columns(pl.lit(None).alias("y_pred"))
 
-    def save_state(self, path: Path) -> None:
-        self.results[1] = pl.read_csv(path)
+        equations = {
+            row["group_id"]: row["equation"]
+            for row in grouping_results.iter_rows(named=True)
+        }
+
+        input_features_row = input_features.collect().to_dicts()
+        
+        y_pred_list = []
+
+        for row in output.iter_rows(named=True):
+            group_id = row["group_id"]
+            if group_id is not None and group_id in equations:
+                equation = equations[group_id]
+                
+                idx = row["count"]
+                if 0 <= idx < len(input_features_row):
+                    features_row = input_features_row[idx]
+                    try:
+                        allowed_funcs = {k: getattr(math, k) for k in ["sqrt", "sin", "cos", "log", "exp"]}
+                        pred = eval(equation, allowed_funcs, features_row)
+                    except Exception as e:
+                        print(f"Error evaluating row {idx} with equation '{equation}': {e}")
+                        pred = None
+                else:
+                    pred = None
+            else:
+                pred = None
+
+            y_pred_list.append(pred)
+
+        output = output.with_columns(pl.Series("y_pred", y_pred_list))
+        print(output)
+        return pl.DataFrame({"y_pred": y_pred_list})
+
+
+
+
+        
+
+    def load_from_state(self) -> None:   #What to implement here since there is no .pkl to load and dump
+        #self.results[0] = pl.read_csv(path)
+        return
+
+    def save_state(self) -> None:
+        #self.results[1] = pl.read_csv(path)
+        return
 
 
 """ def main():

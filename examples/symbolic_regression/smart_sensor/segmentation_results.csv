@@ -1,0 +1,7 @@
+window_start,window_end,extensions,equation,loss
+0,200,6,input_u + input_u*input_u*4.8345065 + 1.7065972 - 0.38771635*0.545226244356227/(input_u*input_u - 3.9900033),0.028893422
+200,300,1,input_u*(input_u - input_u/(-input_u - 1*1.3450131 + (input_u - 1.0527903/input_u)/(input_u*input_u*(input_u - 1*0.9966336))))*4.310363,0.28254664
+300,500,6,sqrt(input_u + 1.0),4.862484
+500,700,6,input_u + input_u*input_u*4.8345065 + 1.7065972 - 0.38771635*0.545226244356227/(input_u*input_u - 3.9900033),0.028893422
+700,800,1,input_u*(input_u - input_u/(-input_u - 1*1.3450131 + (input_u - 1.0527903/input_u)/(input_u*input_u*(input_u - 1*0.9966336))))*4.310363,0.28254664
+800,1001,7,sqrt(input_u + 1.0),7.777085e-16

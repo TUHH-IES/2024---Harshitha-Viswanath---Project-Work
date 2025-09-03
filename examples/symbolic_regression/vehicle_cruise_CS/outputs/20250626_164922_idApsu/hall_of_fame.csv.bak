@@ -1,0 +1,13 @@
+Complexity,Loss,Equation
+1,12.003778,"48.478516"
+3,0.04895105,"Velocity_t + dx"
+5,0.04888256,"Velocity_t - (dx / -1.0014023)"
+7,0.048275005,"((Velocity_t + dx) + 0.35868278) * 0.99279773"
+9,0.04767289,"(Velocity_t * 0.9815019) - ((dx * -0.9893452) - 0.9036178)"
+12,0.046079203,"((sqrt(Velocity_t) * 4.8748384) / dx) + ((Velocity_t * 0.9411977) - -1.093848)"
+15,0.044386405,"((((13.586692 / (dx - -0.086431704)) - -0.044642482) * sqrt(sqrt(Velocity_t))) + Velocity_t) * 0.96104544"
+16,0.04437851,"((14.545626 / dx) * ((sqrt(Velocity_t) * 0.19445692) + dt)) + ((Velocity_t * 0.9585494) - -0.16182733)"
+17,0.044351634,"(((Velocity_t - -0.5821241) + ((sqrt(sqrt(Velocity_t - dt)) * 13.594706) / dx)) * 0.96062624) - 0.5115459"
+24,0.03359045,"(Velocity_t + ((Velocity_t / ((sqrt(Velocity_t) / (-0.02568508 / (dx + dt))) + (sqrt(sqrt(Velocity_t)) * (Velocity_t / -0.07123605)))) / -1.9772499)) + dx"
+28,0.022381816,"Velocity_t + (((Velocity_t / (((Velocity_t / sqrt(-0.33375242 + Velocity_t)) / (-0.02568508 / (dx + dt))) + (sqrt(sqrt(Velocity_t)) * (Velocity_t / -0.07123605)))) / -1.9772499) + dx)"
+29,0.0043842806,"(((Velocity_t / ((sqrt(sqrt(Velocity_t * (Velocity_t + 1.2711737))) / (-0.02569043 / (dx + dt))) + ((Velocity_t * sqrt(sqrt(Velocity_t))) / -0.07123056))) / -1.9772499) + Velocity_t) + dx"

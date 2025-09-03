@@ -1,0 +1,12 @@
+Complexity,Loss,Equation
+1,656.5442,"77.93395"
+3,111.97096,"input_u * 20.998219"
+5,2.89226,"(input_u * input_u) * 5.177542"
+7,2.3724554,"(1.3648248 - (input_u * -4.846882)) * input_u"
+9,2.2796922,"(input_u * (5.9890857 - (input_u * -4.18714))) + -7.701294"
+10,2.090781,"(sqrt(input_u - 1.9971776) + (input_u * input_u)) * 4.769851"
+12,1.9937037,"(sqrt((input_u * input_u) + -3.99962) + (input_u * input_u)) * 4.2782545"
+20,1.9801723,"((sqrt((input_u * input_u) + (-4.0394464 + ((-1.8449948 / -1.1984693) * 0.028838605))) + (input_u * input_u)) * 4.247853) + 0.647606"
+21,1.8363781,"(input_u - (((input_u * (((-4.9109454 - input_u) * sqrt(input_u + -1.9910487)) - input_u)) - sqrt(input_u)) - 6.092931)) + 4.3759923"
+22,1.7601787,"((input_u + sqrt(sqrt(sqrt((input_u * (input_u - sqrt(input_u))) - 1.1692688) * sqrt(input_u)))) * (3.8285193 * input_u)) + -1.167073"
+25,1.2588731,"(sqrt(input_u) + (((input_u * input_u) - (0.3334181 / ((((input_u - 1.9634047) / input_u) * 5.1331196) / 0.81745493))) * 4.601484)) + (input_u * sqrt(input_u))"

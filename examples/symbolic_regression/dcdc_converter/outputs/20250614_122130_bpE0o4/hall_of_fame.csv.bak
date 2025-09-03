@@ -1,0 +1,12 @@
+Complexity,Loss,Equation
+1,6.241825e-5,"0.01816983"
+5,2.1690481e-5,"(CapacitorVoltage_V * -0.0015929246) + 0.025572158"
+7,1.4962766e-5,"(-0.51053494 / (Vin_V - CapacitorVoltage_V)) + 0.0459469"
+9,1.228286e-5,"(((CapacitorVoltage_V * CapacitorVoltage_V) * CapacitorVoltage_V) * -1.24798335e-5) + 0.022652395"
+11,1.0830365e-5,"(((CapacitorVoltage_V * CapacitorVoltage_V) * (CapacitorVoltage_V * CapacitorVoltage_V)) * -1.0544435e-6) + 0.022085227"
+13,1.0094584e-5,"(((CapacitorVoltage_V * (CapacitorVoltage_V * CapacitorVoltage_V)) * CapacitorVoltage_V) * (CapacitorVoltage_V * -8.731124e-8)) + 0.021685679"
+17,1.0094574e-5,"(((CapacitorVoltage_V * CapacitorVoltage_V) * ((((CapacitorVoltage_V - L_H) * CapacitorVoltage_V) * CapacitorVoltage_V) * 0.00044799433)) * -0.0001948975) + 0.021685753"
+20,1.0088692e-5,"((((CapacitorVoltage_V * (CapacitorVoltage_V * (CapacitorVoltage_V - 0.44221905))) * (CapacitorVoltage_V * CapacitorVoltage_V)) * L_H) * (sqrt(L_H) * -0.0028649198)) + 0.021669522"
+21,1.0029417e-5,"(((CapacitorVoltage_V * ((((CapacitorVoltage_V * (CapacitorVoltage_V * -1.9099735)) - (Vin_V - CapacitorVoltage_V)) * CapacitorVoltage_V) - Vin_V)) * 4.3740314e-8) * CapacitorVoltage_V) + 0.021788437"
+23,8.868463e-6,"(((CapacitorVoltage_V - (((((CapacitorVoltage_V * CapacitorVoltage_V) * CapacitorVoltage_V) * 0.0020535877) * ((CapacitorVoltage_V * -0.0024627598) * Vin_V)) * CapacitorVoltage_V)) * CapacitorVoltage_V) * -4.373536e-5) + 0.022184733"
+24,8.505153e-6,"((CapacitorVoltage_V * Vin_V) * (((CapacitorVoltage_V * ((((Vin_V * (CapacitorVoltage_V * CapacitorVoltage_V)) * CapacitorVoltage_V) * 5.9309878e-5) * sqrt(CapacitorVoltage_V))) + Vin_V) * -6.158467e-7)) + 0.022689637"

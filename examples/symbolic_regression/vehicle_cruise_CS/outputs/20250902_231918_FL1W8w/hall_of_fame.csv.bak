@@ -1,0 +1,3 @@
+Complexity,Loss,Equation
+1,3.1200356,"x0"
+3,2.8758726e-13,"x1 + x0"

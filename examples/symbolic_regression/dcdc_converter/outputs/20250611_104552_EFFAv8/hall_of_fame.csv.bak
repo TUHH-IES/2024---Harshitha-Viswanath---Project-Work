@@ -1,0 +1,10 @@
+Complexity,Loss,Equation
+1,8.218781e-6,"-0.019073535"
+3,4.5830873e-7,"CapacitorVoltage_V * -0.0009993081"
+5,4.5803964e-7,"(0.021112353 - CapacitorVoltage_V) * L_H"
+7,4.551743e-7,"(L_H * (CapacitorVoltage_V * -1.0195847)) + 0.0003949902"
+13,4.5517422e-7,"(((L_H + 1.0185828) * (-4.1049657 - (CapacitorVoltage_V + -0.52145934))) * L_H) + 0.004048515"
+15,4.479548e-7,"(((-8.41984 - L_H) * L_H) * sqrt((CapacitorVoltage_V + -0.76552176) + sqrt(CapacitorVoltage_V))) - -0.020938626"
+16,4.4782388e-7,"(sqrt(L_H * CapacitorVoltage_V) * (-1.6903691 - (((CapacitorVoltage_V + -2.1315894) - CapacitorVoltage_V) + 0.7138565))) + 0.018497013"
+18,4.478224e-7,"(sqrt(L_H * CapacitorVoltage_V) * (-3.2939432 - ((1.4641843 + (CapacitorVoltage_V + -2.0954337)) - (2.3900373 + CapacitorVoltage_V)))) + 0.018499944"
+20,4.477263e-7,"(sqrt(L_H * (CapacitorVoltage_V + 1.0332339)) * (-3.6712248 - ((CapacitorVoltage_V + 1.3045472) + (-1.4180871 - (CapacitorVoltage_V + 3.2771888))))) + 0.020623503"

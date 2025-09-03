@@ -1,0 +1,7 @@
+Complexity,Loss,Equation
+1,0.011418605,"2.2468507"
+7,0.0114185875,"((1.6879896 - input_u) + input_u) + 0.55887"
+9,0.011418583,"((input_u + (input_u + 2.2468593)) - input_u) - input_u"
+11,0.011418564,"(((input_u + input_u) + 2.8579614) - input_u) - (input_u - -0.6111123)"
+23,0.011418483,"(((0.22483818 - input_u) + 0.7892802) - (((input_u + input_u) + input_u) + -0.5239365)) + ((input_u + (input_u + (input_u + input_u))) + 0.7088236)"
+25,0.0114184385,"(0.12754613 - input_u) + ((0.88636523 - (((input_u + input_u) + -0.5411678) + input_u)) + (((((input_u + input_u) + input_u) + -0.19458115) + input_u) + 0.8863614))"

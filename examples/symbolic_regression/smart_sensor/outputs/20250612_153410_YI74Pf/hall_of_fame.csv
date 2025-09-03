@@ -1,0 +1,10 @@
+Complexity,Loss,Equation
+1,878.4878,"69.25706"
+3,128.14252,"input_u * 20.450027"
+5,2.537351,"(input_u * input_u) * 5.1875873"
+7,1.3168213,"(input_u * (input_u * 5.0166497)) - -2.7165282"
+11,1.3157463,"2.6774375 - ((input_u / 195.49147) * (input_u * (input_u + -985.22424)))"
+12,1.3141484,"((input_u * (sqrt(input_u) - (input_u * -4.756543))) - input_u) + 2.8988042"
+18,1.3139001,"((((((input_u + input_u) + (sqrt(input_u) + input_u)) + input_u) * input_u) + 2.4887836) - input_u) * 1.1775931"
+21,1.3114969,"(input_u * ((((input_u * 3.867783) + 1.9636592) + ((input_u / sqrt(input_u + -1.0323004)) - sqrt(input_u))) + input_u)) - input_u"
+22,1.3078855,"((((((input_u + (sqrt(input_u) + (input_u * 2.6371007))) - 1.7294028) + input_u) + 0.7872896) * input_u) + input_u) - (-2.3996239 / input_u)"

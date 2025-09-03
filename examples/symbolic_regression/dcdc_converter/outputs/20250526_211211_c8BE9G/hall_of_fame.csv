@@ -1,0 +1,13 @@
+Complexity,Loss,Equation
+1,6.241825e-5,"0.01816983"
+3,5.9823305e-5,"0.018559325 - Time_s"
+4,3.617513e-5,"0.03677026 - sqrt(Time_s)"
+5,2.3304337e-5,"(CapacitorVoltage_V * -0.0013769828) + 0.023638418"
+7,1.7205137e-5,"((Time_s * CapacitorVoltage_V) * -2.2667952) + 0.024267873"
+9,1.3229384e-5,"((CapacitorVoltage_V * (Time_s * -0.19996874)) * CapacitorVoltage_V) + 0.023008693"
+10,1.0611654e-5,"0.023487434 - ((Time_s * 2.04753) * exp(CapacitorVoltage_V * 0.2260383))"
+13,1.0190786e-5,"0.020948134 - sqrt((Time_s * (exp(CapacitorVoltage_V * 0.71602577) * Time_s)) * 0.137927)"
+15,8.904444e-6,"0.022200596 - sqrt(Time_s * ((exp(CapacitorVoltage_V * 0.72626877) * (Time_s * 1.021946)) * 0.14369282))"
+21,6.1853043e-6,"((exp(exp((Time_s / 0.6002958) * ((CapacitorVoltage_V * (CapacitorVoltage_V + 4.1871753)) * 4.0669227))) * (Time_s * -2.3861787)) * 0.8591605) + 0.023202054"
+23,6.058677e-6,"(((exp(exp((Time_s / 0.8929098) * ((CapacitorVoltage_V * ((CapacitorVoltage_V + 3.8570876) * -1.127174)) * -5.1654005))) * -2.5122538) * Time_s) * 0.98752093) + 0.0237071"
+29,5.573292e-6,"(((Time_s / -0.12659965) - ((Time_s * Time_s) * (CapacitorVoltage_V * ((CapacitorVoltage_V * CapacitorVoltage_V) * (((CapacitorVoltage_V * CapacitorVoltage_V) * (CapacitorVoltage_V * (Time_s * 0.745186))) * CapacitorVoltage_V))))) + 0.017128423) * 1.446732"

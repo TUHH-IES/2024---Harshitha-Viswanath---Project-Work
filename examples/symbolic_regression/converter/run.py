@@ -11,7 +11,7 @@ def main() -> None:
 
     data = DataFrame.from_uri(uri="file:C:/Users/49157/Desktop/PA/SR_Original_code/SymbolicRegression4HA/data/converter/short_wto_zeros_data_converter_omega400e3_beta40e3_Q10_theta60.csv")
 
-    inputs = ["t", "w1", "w2"]
+    inputs = ["t", "w1"]
     outputs = ["w2"]
 
     derivative = Derivative(outputs)
@@ -22,7 +22,6 @@ def main() -> None:
         start_width = 100,
         step_width = 20, 
         target_var = outputs,
-        derivative = True,
     )
     
     model = learn_offline(

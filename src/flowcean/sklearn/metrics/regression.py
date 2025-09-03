@@ -61,3 +61,12 @@ class R2Score(OfflineMetric):
             true.collect(streaming=True),
             predicted.collect(streaming=True),
         )
+
+class RootMeanSquaredError(OfflineMetric):
+
+    @override
+    def __call__(self, true: pl.LazyFrame, predicted: pl.LazyFrame) -> Any:
+        return metrics.root_mean_squared_error(
+            true.collect(streaming=True),
+            predicted.collect(streaming=True),
+        ) 

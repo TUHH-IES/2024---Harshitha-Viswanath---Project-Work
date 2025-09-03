@@ -1,0 +1,4 @@
+Complexity,Loss,Equation
+1,0.08932782,"1.0566471"
+4,1.691516e-14,"sqrt(input_u - -1.0000002)"
+5,7.777085e-16,"sqrt(input_u + sqrt(1.0))"

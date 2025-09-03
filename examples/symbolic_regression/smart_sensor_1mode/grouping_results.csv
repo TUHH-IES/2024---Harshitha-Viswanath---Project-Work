@@ -1,0 +1,2 @@
+group_id,loss,equation
+0,3.8047043e-15,sqrt(input_u + 1.0)

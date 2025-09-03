@@ -1,0 +1,4 @@
+Complexity,Loss,Equation
+1,4.673647,"Velocity_t"
+3,0.010122645,"Velocity_t + dx"
+5,0.01010078,"(dx * 0.9978388) + Velocity_t"
