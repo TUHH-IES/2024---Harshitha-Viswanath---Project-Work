@@ -145,23 +145,23 @@ class GroupedData:
             mean_loss += group.loss * len(group.data)
         return mean_loss / total_length
     
-    def write_groups_csv(self):
+    def write_groups_csv(self, path):
         data = pl.DataFrame({
             "group_id": [group.group_id for group in self.groups],
             "loss": [group.loss for group in self.groups],
             "equation": [sympy.sstr(group.equation) for group in self.groups],
         })
+        data.write_csv(path)
         return data #directly return the dataframe instead of a csv file
-        #data.write_csv(path)
 
-    def write_windows_csv(self):
+    def write_windows_csv(self, path):
         data = pl.DataFrame({
             "group_id": [group.group_id for group in self.groups for _ in group.windows],
             "window_start": [window[0] for group in self.groups for window in group.windows],
             "window_end": [window[1] for group in self.groups for window in group.windows],
         })
+        data.write_csv(path)
         return data #return dataframe instead of dumping into csv file
-        #data.write_csv(path)
 
     def to_json(self):
         return {
@@ -211,29 +211,30 @@ class Segmentor:
         self.file_prefix = file_prefix
         self.target_var = target_var
 
-        #pysr arguments
-        pysr_args = {
-            "niterations": 200,
+        #pysr default arguments - segmentation
+        segmentation_pysr_args = {
+            "niterations": 100,#150,
             "random_state": 42,
             "deterministic": True,
-            "procs": 0,
             "parallelism": "serial",
-            "parsimony": 0.001,
-            "binary_operators": ["+", "-", "*", "/", "pow"],
-            "unary_operators": ["sqrt", "log", "exp"],
-            "populations": 60,
+            "parsimony": 0.32,#0.01,#0.00032#1e-6
+            "binary_operators": ["+", "-", "*", "/"],
+            "unary_operators": ["sqrt"],
+            "population_size": 42,#60,
             "verbosity" : True,
-            "model_selection": "best",
+            #"model_selection": "best",
 
         }
 
+        pysr_args = {**kwargs, **segmentation_pysr_args}
+        
         #keyword arguments with default values
-        self.step_iterations = 5
+        self.step_iterations = 20#5
         self.init_iterations = 100
         self.hist_length = 5
         self.criterion = getattr(segmentation_criteria, "decrease")
         self.criterion = partial(self.criterion, saturation=1e-6) 
-        self.selection = "loss" #check with loss?
+        self.selection = "loss" 
         self.learner = PySRRegressor(**pysr_args) #if any specific args are sent else default params are used
         self.learner.feature_names = self.features
 
@@ -324,40 +325,28 @@ class GroupIdentificator:
         self.features = features
         self.file_prefix = file_prefix
 
-        #pysr args
-        """ pysr_args = {
-            "niterations": 100,
-            "verbosity": 0,
+        # pysr default arguments - group identification
+        grouping_pysr_args = {
+
+            "niterations": 10,
             "random_state": 42,
             "deterministic": True,
-            "procs": 0,
             "parallelism": "serial",
-            "parsimony": 0.0032,
+            "parsimony": 1e-6,
             "binary_operators": ["+", "-", "*", "/"],
             "unary_operators": ["sqrt"],
-            "populations": 40 
-        } """
-
-        pysr_args = {
-            "niterations": 200,
-            "random_state": 42,
-            "deterministic": True,
-            "procs": 0,
-            "parallelism": "serial",
-            "parsimony": 0.001,
-            "binary_operators": ["+", "-", "*", "/", "pow"],
-            "unary_operators": ["sqrt", "log", "exp"],
-            "populations": 60,
+            "population_size": 30,#60,
             "verbosity" : True,
-            "model_selection": "best",
+            #"model_selection": "best",
 
         }
 
+        pysr_args = {**kwargs, **grouping_pysr_args}
 
         #keyword arguments with default values
         self.criterion = getattr(grouping_criteria, "preserving_group_loss")
         self.criterion = partial(self.criterion, factor=1)
-        self.selection = "loss" #check with loss?
+        self.selection = "loss"
         self.learner = PySRRegressor(**pysr_args) #if any specific args are sent else default params are used
         self.learner.warm_start = False
         self.learner.feature_names = self.features
@@ -391,10 +380,6 @@ class GroupIdentificator:
         Returns:
             GroupedData: The grouped data.
         """
-        # todo: use previous models as starting point (option:
-        # 1) try previous models for both. If one of them is better than the two before, a new one is found,
-        # 2) test fit first, then re-learn?)
-        # alternative procedure: test against all groups and choose the smallest one, if the error is below something or the increase in accuracy is large enough
 
         segments = segmented_results.segments
         data_frame = segmented_results.data
@@ -435,7 +420,7 @@ class GroupIdentificator:
                     equation = self.learner.sympy()
                     loss = self.learner.get_best()[self.selection]
                     if self.criterion(
-                        mean(group.segment_losses),  # todo: weighted by segment length?
+                        mean(group.segment_losses),  
                         loss,
                     ):
                         print("group", window, "into", group.group_id)
@@ -470,37 +455,31 @@ class SymbolicRegression(SupervisedLearner):
 
     def __init__(
             self,
-            #csv_file_path : str, #dataframe instead of path
             features : List[str],
             start_width : int,
             step_width : int,
-            target_var : str,  #should this be a list??
-            #derivative : bool,
+            target_var : str,  
+            segmentation_args : Any,
+            grouping_args : Any,
+            
     ) -> None: 
-        #self.csv_file_path = csv_file_path
         self.features = features
         self.start_width = start_width
         self.step_width = step_width
         self.target_var = target_var
-        #self.derivative = derivative
+        self.segmentation_args = segmentation_args
+        self.grouping_args = grouping_args
         
         self.file_prefix = "converter_file_prefix"  
 
-        """ self.data_frame = pl.read_csv(self.csv_file_path, schema_overrides=[pl.Float64] * len(self.features))     
-        if derivative is not None  and self.derivative:
-            self.data_frame = self.data_frame.with_columns(diff=pl.col(self.target_var).diff())
-            self.data_frame[0, "diff"] = self.data_frame["diff"][1]
-            self.target_var = "diff" 
-        print(self.data_frame)
- """
     @override
     def learn(self, inputs, outputs):
-        inputs = inputs.collect().drop(self.target_var)
+        inputs = inputs.collect()   #.drop(self.target_var)
         if isinstance(outputs, pl.LazyFrame):
             outputs = outputs.collect()
         self.data_frame = pl.concat([inputs, outputs], how="horizontal")
         print(self.data_frame)
-        segmentor = Segmentor(start_width=self.start_width, step_width=self.step_width, features= self.features, file_prefix=self.file_prefix, target_var=self.target_var)
+        segmentor = Segmentor(**self.segmentation_args, start_width=self.start_width, step_width=self.step_width, features= self.features, file_prefix=self.file_prefix, target_var=self.target_var)
         starttime = time.time()
         segmented_data = segmentor.segment(self.data_frame) #segmented_data is an object of class SegmentedData
         endtime = time.time()
@@ -513,30 +492,18 @@ class SymbolicRegression(SupervisedLearner):
             file.write("Segmentation: " + str(endtime - starttime) + "\n")
 
 
-        group_identificator = GroupIdentificator(features=self.features, file_prefix=self.file_prefix)
+        group_identificator = GroupIdentificator(**self.grouping_args, features=self.features, file_prefix=self.file_prefix)
         starttime = time.time()
         grouped_data = group_identificator.group_segments(segmented_data)
         endtime = time.time()
-        grouping_results = grouped_data.write_groups_csv()
-        grouping_windows = grouped_data.write_windows_csv()
+        grouped_data.write_groups_csv("grouping_results.csv")
+        grouped_data.write_windows_csv("grouping_windows.csv")
 
-        """ for group_id, group in grouped_data.groups.items():
-            print(group_id, group) """
-        """ print(grouping_windows)
-        print(grouping_results)
- """
         print("Time for grouping:", endtime - starttime)
         with open("time.txt", "a") as file:
             file.write("Grouping: " + str(endtime - starttime))
         grouped_data.visualize() 
 
-        return SymbolicRegressionModel([grouping_windows, grouping_results])
-        
-""" def main():
-
-    model = SymbolicRegression("C:/Users/49157/Desktop/PA/SR_Original_code/SymbolicRegression4HA/data/converter/short_wto_zeros_data_converter_omega400e3_beta40e3_Q10_theta60.csv", ["t","w1","w2"], 100, 20, "w2", True)
-    SRModel = model.learn()
-    SRModel.predict()
-
-if __name__ == "__main__":
-    main() """
+        results = [pl.read_csv("grouping_windows.csv").lazy(), pl.read_csv("grouping_results.csv").lazy()]
+        model = SymbolicRegressionModel(results)
+        return model
