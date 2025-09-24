@@ -11,12 +11,22 @@ from flowcean.core import Transform
 logger = logging.getLogger(__name__)
 
 class Derivative:
+    """
+    A transformation class that computes the discrete derivative
+    (difference between consecutive rows) for given target variables.
+    """
 
     def __init__(self, target_var):
         self.target_var = target_var
 
     @override
     def apply(self, output_features) -> pl.LazyFrame:
+        """
+        Apply the derivative transformation:
+        - Compute the difference (diff) for target columns
+        - Replace the first row NaN with the second-row value
+        - Drop original columns and replace them with their diff versions
+        """
        data_frame = output_features.collect()
        diff_cols = [pl.col(col).diff().alias(f"diff_{col}")
                     for col in self.target_var]
