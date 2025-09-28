@@ -9,7 +9,7 @@ import numpy as np
 import math
 from typing_extensions import override
 
-# Base Model class (if defined in your project)
+# Base Model class 
 from flowcean.core import Model
 
 class SymbolicRegressionModel(Model):
@@ -118,35 +118,3 @@ class SymbolicRegressionModel(Model):
         return
 
 
-""" def main():
-    # Paths to input files
-    grouping_windows_path = Path(
-        "C:/Users/49157/Desktop/PA/SR_Original_code/SymbolicRegression4HA/results/converter/grouping_windows.csv"
-    )
-    grouping_results_path = Path(
-        "C:/Users/49157/Desktop/PA/SR_Original_code/SymbolicRegression4HA/results/converter/grouping_results.csv"
-    )
-
-    # Load the data into Polars DataFrames
-    grouping_windows = pl.read_csv(grouping_windows_path)
-    grouping_results = pl.read_csv(grouping_results_path)
-
-    # Initialize the SymbolicRegressionModel
-    model = SymbolicRegressionModel([grouping_windows, grouping_results])
-
-    # Predict on new input data
-    input_path = Path(
-        "C:/Users/49157/Desktop/PA/SR_Original_code/SymbolicRegression4HA/data/converter/short_wto_zeros_data_converter_omega400e3_beta40e3_Q10_theta60.csv"
-    )
-    input_data = pl.read_csv(input_path)
-
-    # Call the predict method
-    model.predict(input_data)
-
-     model.save(grouping_results_path)  # Save the model
-    model.load(grouping_windows_path)  # Load the model
- 
-
-if __name__ == "__main__":
-    main()
- """
